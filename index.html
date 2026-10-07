@@ -22,18 +22,20 @@ body{background:#E4EAE7;min-height:100vh;}
 .ctl .lead-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 14px;font-size:12px;margin-left:auto;}
 .ctl .lead-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:blink 1.6s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.stages{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
-.stage-tab{flex:1;min-width:150px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px 10px;cursor:pointer;transition:all .18s;}
-.stage-tab .no{font-size:10px;color:#7FC8A9;font-weight:700;}
-.stage-tab .nm{font-size:12.5px;font-weight:700;margin-top:2px;}
-.stage-tab .ds{font-size:10px;color:#93A5B7;margin-top:2px;}
-.stage-tab.on{background:var(--green);border-color:var(--green);}
-.stage-tab.on .no{color:#DFF3EA;}
-.stage-tab.on .ds{color:#CFEBDD;}
-.stage-arrow{align-self:center;color:#54687C;font-size:14px;}
+/* ---------- 底部切换条（小程序式 Tab · 顶部不再放模块） ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:6px;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:rgba(22,40,60,.97);box-shadow:0 -2px 16px rgba(0,0,0,.20);}
+.tabbar .stage-tab{flex:1;min-width:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .18s;}
+.tabbar .stage-tab .no{font-size:9.5px;color:#7FC8A9;font-weight:700;}
+.tabbar .stage-tab .nm{font-size:11.5px;font-weight:700;color:#fff;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tabbar .stage-tab.on{background:var(--green);border-color:var(--green);}
+.tabbar .stage-tab.on .no{color:#DFF3EA;}
+@media(min-width:900px){                              /* 宽屏：居中胶囊，像演示遥控 */
+  .tabbar{left:50%;right:auto;transform:translateX(-50%);bottom:16px;border-radius:14px;padding:7px 8px;box-shadow:0 8px 26px rgba(0,0,0,.28);}
+  .tabbar .stage-tab{flex:0 0 auto;width:138px;}
+}
 
 /* ---------- 舞台 ---------- */
-.wrap{max-width:1200px;margin:0 auto;padding:26px 3% 60px;}
+.wrap{max-width:1200px;margin:0 auto;padding:26px 3% 110px;}
 .screen{display:none;}
 .screen.on{display:block;animation:fade .3s;}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -134,13 +136,9 @@ html.is-mobile .ctl .brand .en{display:none;}
 html.is-mobile .ctl .lead-chip{margin-left:auto;min-width:0;font-size:10px;padding:3px 9px;gap:6px;}
 html.is-mobile .ctl .lead-chip .dot{width:6px;height:6px;}
 html.is-mobile #leadChip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-html.is-mobile .stages{flex-wrap:nowrap;gap:3px;margin-top:8px;}
-html.is-mobile .stage-arrow{font-size:10px;flex:0 0 auto;}
-html.is-mobile .stage-tab{min-width:0;flex:1 1 0;padding:6px 4px;border-radius:8px;text-align:center;}
-html.is-mobile .stage-tab .no{font-size:9px;}
-html.is-mobile .stage-tab .nm{font-size:10.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-html.is-mobile .stage-tab .ds{display:none;}          /* 去掉每格的说明行，避免占屏 */
-html.is-mobile .wrap{flex:1;min-height:0;max-width:none;padding:0;display:flex;flex-direction:column;overflow:hidden;}
+html.is-mobile .tabbar .stage-tab .no{font-size:9px;}
+html.is-mobile .tabbar .stage-tab .nm{font-size:10.5px;}
+html.is-mobile .wrap{flex:1;min-height:0;max-width:none;padding:0 0 56px;display:flex;flex-direction:column;overflow:hidden;}
 html.is-mobile .screen.on{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
 html.is-mobile .phone{flex:1;min-height:0;width:100%;height:auto;margin:0;border:0;border-radius:0;box-shadow:none;}
 html.is-mobile .pnav{height:44px;border-radius:0;}
@@ -159,15 +157,6 @@ html.is-mobile .demo-tag{display:none;}
   <div class="brand">
     <b>青豆共生云</b><span class="en">Qingdou Co-Grow Cloud · 现场演示</span>
     <div class="lead-chip"><span class="dot"></span><span id="leadChip">演示线索：陈太（Grace Tan）· 线索已留资</span></div>
-  </div>
-  <div class="stages">
-    <div class="stage-tab on" data-stage="0"><div class="no">屏 1 · B端</div><div class="nm">学习合伙人工作台</div><div class="ds">AI 生成本地化内容 · 线索 · 合规</div></div>
-    <span class="stage-arrow">→</span>
-    <div class="stage-tab" data-stage="1"><div class="no">屏 2 · C端</div><div class="nm">家长落地页</div><div class="ds">AI 口语诊断 · 真人试听预约</div></div>
-    <span class="stage-arrow">→</span>
-    <div class="stage-tab" data-stage="2"><div class="no">屏 3 · C端</div><div class="nm">学生 AI 口语练习</div><div class="ds">情景对话 · 发音评测</div></div>
-    <span class="stage-arrow">→</span>
-    <div class="stage-tab" data-stage="3"><div class="no">屏 4 · S端</div><div class="nm">经营驾驶舱</div><div class="ds">漏斗 · B端活跃 · 线索归因回流</div></div>
   </div>
 </div>
 
@@ -379,6 +368,13 @@ html.is-mobile .demo-tag{display:none;}
   </div>
 </div>
 
+</div>
+
+<div class="tabbar">
+  <div class="stage-tab on" data-stage="0"><div class="no">屏 1 · B端</div><div class="nm">学习合伙人工作台</div></div>
+  <div class="stage-tab" data-stage="1"><div class="no">屏 2 · C端</div><div class="nm">家长落地页</div></div>
+  <div class="stage-tab" data-stage="2"><div class="no">屏 3 · C端</div><div class="nm">学生 AI 口语练习</div></div>
+  <div class="stage-tab" data-stage="3"><div class="no">屏 4 · S端</div><div class="nm">经营驾驶舱</div></div>
 </div>
 
 <div class="demo-tag">青豆共生云 Demo · 四屏一闭环 · 情景演示数据</div>
