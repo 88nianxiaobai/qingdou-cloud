@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青豆共生云 · 现场演示（四屏一闭环）</title>
+<style>
+:root{
+  --green:#1F9D6C; --dgreen:#0E6B48; --lgreen:#E3F1EA; --amber:#F2A93B;
+  --ink:#16283C; --body:#33404E; --sub:#6B7683; --line:#E3E9E6; --bg:#EEF2F0; --card:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:#E4EAE7;min-height:100vh;}
+
+/* ---------- 顶部演示控制台 ---------- */
+.ctl{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;padding:12px 4%;box-shadow:0 2px 12px rgba(0,0,0,.18);}
+.ctl .brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ctl .brand b{font-size:16px;letter-spacing:.02em;}
+.ctl .brand .en{font-size:11px;color:#8FA3B8;}
+.ctl .lead-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 14px;font-size:12px;margin-left:auto;}
+.ctl .lead-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:blink 1.6s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.stages{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.stage-tab{flex:1;min-width:150px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px 10px;cursor:pointer;transition:all .18s;}
+.stage-tab .no{font-size:10px;color:#7FC8A9;font-weight:700;}
+.stage-tab .nm{font-size:12.5px;font-weight:700;margin-top:2px;}
+.stage-tab .ds{font-size:10px;color:#93A5B7;margin-top:2px;}
+.stage-tab.on{background:var(--green);border-color:var(--green);}
+.stage-tab.on .no{color:#DFF3EA;}
+.stage-tab.on .ds{color:#CFEBDD;}
+.stage-arrow{align-self:center;color:#54687C;font-size:14px;}
+
+/* ---------- 舞台 ---------- */
+.wrap{max-width:1200px;margin:0 auto;padding:26px 3% 60px;}
+.screen{display:none;}
+.screen.on{display:block;animation:fade .3s;}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.phone{width:390px;height:800px;margin:0 auto;background:#fff;border-radius:36px;border:8px solid #20242a;box-shadow:0 20px 50px rgba(14,60,40,.20);overflow:hidden;display:flex;flex-direction:column;}
+.pnav{flex:0 0 auto;height:46px;display:flex;align-items:center;justify-content:center;position:relative;background:#fff;border-bottom:1px solid var(--line);font-size:14.5px;font-weight:700;color:var(--ink);}
+.pnav .who{position:absolute;right:12px;font-size:10px;color:var(--sub);font-weight:400;border:1px solid var(--line);border-radius:99px;padding:2px 9px;}
+.pbody{flex:1;overflow-y:auto;background:#F7FAF8;padding:12px 12px 16px;scrollbar-width:none;}
+.pbody::-webkit-scrollbar{display:none;}
+
+/* ---------- 通用组件 ---------- */
+.card{background:var(--card);border-radius:14px;padding:13px 14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(20,50,35,.05);}
+.ai-strip{background:linear-gradient(120deg,var(--dgreen),var(--green));border-radius:14px;color:#fff;padding:13px 14px;margin-bottom:10px;}
+.ai-strip .t{font-size:13px;font-weight:700;}
+.ai-strip .d{font-size:11.5px;opacity:.92;margin-top:5px;line-height:1.6;}
+.sec-t{font-size:12px;font-weight:800;color:var(--dgreen);margin:13px 2px 7px;display:flex;align-items:center;gap:6px;}
+.sec-t::before{content:"";width:4px;height:12px;background:var(--green);border-radius:2px;}
+.btn{display:block;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:10px 0;font-size:12.5px;font-weight:700;margin-top:9px;cursor:pointer;transition:filter .12s;}
+.btn:active{filter:brightness(.92);}
+.btn.ghost{background:#fff;color:var(--dgreen);border:1px solid var(--green);}
+.chk{display:flex;align-items:flex-start;gap:6px;font-size:10px;color:var(--dgreen);background:var(--lgreen);border-radius:8px;padding:7px 9px;margin-bottom:6px;line-height:1.5;}
+.chk.warn{background:#FDF1DC;color:#A86B06;}
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;background:var(--lgreen);color:var(--dgreen);font-weight:600;}
+.pill.amber{background:#FDF1DC;color:#A86B06;}
+.pill.red{background:#FDEAEA;color:#B33A3A;}
+.kv{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.kv:last-child{border-bottom:none;}
+.kv .k{color:var(--sub);}
+.num{font-size:24px;font-weight:800;color:var(--dgreen);}
+.lab{font-size:11px;color:var(--sub);}
+.lead{display:flex;gap:10px;background:#fff;border-radius:12px;padding:11px 12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(20,50,35,.05);cursor:pointer;}
+.lead.hot{border:1.5px solid var(--green);}
+.lead .av{width:38px;height:38px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700;}
+.lead .nm{font-size:12.5px;font-weight:700;}
+.lead .mt{font-size:10.5px;color:var(--sub);margin-top:3px;line-height:1.5;}
+.lead .sg{margin-left:auto;text-align:right;flex:0 0 auto;}
+.lead .score{font-size:16px;font-weight:800;color:var(--amber);}
+.chat{display:flex;gap:8px;margin-bottom:9px;}
+.chat .cav{width:28px;height:28px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;}
+.chat .msg{background:#fff;border-radius:4px 12px 12px 12px;padding:9px 11px;font-size:11.5px;line-height:1.6;box-shadow:0 1px 3px rgba(20,50,35,.05);}
+.chat.mine{flex-direction:row-reverse;}
+.chat.mine .msg{background:var(--lgreen);border-radius:12px 4px 12px 12px;}
+.voice{display:flex;align-items:center;gap:6px;}
+.voice .bars{display:flex;gap:2px;align-items:center;}
+.voice .bars i{width:3px;background:var(--dgreen);border-radius:2px;}
+.score-ring{display:flex;align-items:center;gap:14px;}
+.bar{height:6px;background:#EEF1EF;border-radius:99px;overflow:hidden;flex:1;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber));border-radius:99px;}
+
+/* ---------- S端驾驶舱（桌面） ---------- */
+.dash{background:#fff;border-radius:18px;box-shadow:0 12px 40px rgba(14,60,40,.12);overflow:hidden;}
+.dash-top{background:var(--ink);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.dash-top b{font-size:16px;}
+.dash-top .seg{margin-left:auto;display:flex;gap:6px;}
+.dash-top .seg span{font-size:11px;background:rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;cursor:pointer;}
+.dash-top .seg span.on{background:var(--green);}
+.dash-body{padding:18px 22px;}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;}
+.kpi{background:#F7FAF8;border-radius:12px;padding:13px 14px;}
+.kpi .v{font-size:22px;font-weight:800;color:var(--dgreen);}
+.kpi .d{font-size:10.5px;color:var(--sub);margin-top:4px;}
+.kpi .tr{font-size:10px;margin-top:3px;font-weight:700;}
+.tr.up{color:var(--green);} .tr.down{color:#B33A3A;}
+.dash-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;}
+.panel{background:#F7FAF8;border-radius:12px;padding:14px 16px;}
+.panel h4{font-size:13px;color:var(--ink);margin-bottom:10px;}
+.funnel{display:flex;flex-direction:column;gap:5px;}
+.fstep{display:flex;align-items:center;gap:10px;font-size:11px;}
+.fstep .fb{height:24px;border-radius:6px;background:linear-gradient(90deg,var(--dgreen),var(--green));color:#fff;display:flex;align-items:center;padding:0 10px;font-weight:700;font-size:10.5px;white-space:nowrap;}
+.fstep .fv{color:var(--sub);white-space:nowrap;}
+.trace{background:#fff;border:1.5px solid var(--green);border-radius:12px;padding:12px 14px;}
+.trace .th{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:var(--dgreen);margin-bottom:8px;}
+.tl{display:flex;flex-direction:column;gap:0;}
+.tli{display:flex;gap:10px;font-size:10.5px;line-height:1.5;position:relative;padding:0 0 10px 18px;color:var(--body);}
+.tli::before{content:"";position:absolute;left:4px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--green);}
+.tli::after{content:"";position:absolute;left:7px;top:14px;bottom:0;width:1px;background:var(--line);}
+.tli:last-child::after{display:none;}
+.tli .tm{color:var(--sub);white-space:nowrap;}
+.tli.pending{color:var(--sub);}
+.tli.pending::before{background:#C7D2CC;}
+.brank{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:11px;}
+.brank:last-child{border:none;}
+.brank .rk{width:20px;height:20px;border-radius:6px;background:var(--lgreen);color:var(--dgreen);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.brank .bv{margin-left:auto;text-align:right;color:var(--sub);font-size:10px;}
+.brank .bv b{color:var(--dgreen);font-size:12px;}
+.alert{display:flex;gap:8px;background:#FDF1DC;border-radius:10px;padding:9px 11px;font-size:10.5px;color:#A86B06;line-height:1.5;margin-top:10px;}
+.demo-tag{position:fixed;bottom:14px;right:16px;font-size:10px;color:#9AA6A0;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:99px;padding:4px 12px;}
+.toast{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:99;background:rgba(20,40,30,.9);color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;max-width:82%;text-align:center;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .2s;}
+.toast.on{opacity:1;}
+@media(max-width:640px){ .dash-grid{grid-template-columns:1fr;} .kpis{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="ctl">
+  <div class="brand">
+    <b>青豆共生云</b><span class="en">Qingdou Co-Grow Cloud · 现场演示</span>
+    <div class="lead-chip"><span class="dot"></span><span id="leadChip">演示线索：陈太（Grace Tan）· 线索已留资</span></div>
+  </div>
+  <div class="stages">
+    <div class="stage-tab on" data-stage="0"><div class="no">屏 1 · B端</div><div class="nm">学习合伙人工作台</div><div class="ds">AI 生成本地化内容 · 线索 · 合规</div></div>
+    <span class="stage-arrow">→</span>
+    <div class="stage-tab" data-stage="1"><div class="no">屏 2 · C端</div><div class="nm">家长落地页</div><div class="ds">AI 口语诊断 · 真人试听预约</div></div>
+    <span class="stage-arrow">→</span>
+    <div class="stage-tab" data-stage="2"><div class="no">屏 3 · C端</div><div class="nm">学生 AI 口语练习</div><div class="ds">情景对话 · 发音评测</div></div>
+    <span class="stage-arrow">→</span>
+    <div class="stage-tab" data-stage="3"><div class="no">屏 4 · S端</div><div class="nm">经营驾驶舱</div><div class="ds">漏斗 · B端活跃 · 线索归因回流</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ 屏1 B端工作台 ============ -->
+<div class="screen on" data-screen="0">
+  <div class="phone">
+    <div class="pnav">学习合伙人工作台<span class="who">B端 · 新加坡</span></div>
+    <div class="pbody">
+      <div class="ai-strip">
+        <div class="t">🌤 早上好，Jason · AI 增长 Copilot</div>
+        <div class="d">你的社群以「新加坡华族家庭 · 孩子 6-10 岁」为主。本周 K2-P3 口语启蒙内容互动率最高。已按本地语境生成 3 条内容，均通过合规检查。</div>
+      </div>
+
+      <div class="sec-t">AI 已生成 · 待你确认发布（中英双语）</div>
+      <div class="card">
+        <div style="font-size:12px;font-weight:700;">📌 WhatsApp 社群海报文案</div>
+        <div style="font-size:11px;color:var(--body);line-height:1.65;margin-top:6px;background:#F7FAF8;border-radius:8px;padding:9px 10px;">"Is your child shy to speak English? Try a free AI speaking check + a real 1-on-1 trial class with a certified teacher. 我侄女用了两个月，现在敢主动开口了。名额有限，私信我～"</div>
+        <div class="chk" style="margin-top:8px;">✅ 合规引擎：无收益/效果承诺用语 · 符合 PDPA 个人信息规范 · 广告披露已标注"推荐有礼"</div>
+        <div style="display:flex;gap:8px;"><div class="btn" style="flex:1;" data-act="toast:已发布到 WhatsApp 社群（海报带你的专属推荐码 QD-SG-0186）">确认发布</div><div class="btn ghost" style="flex:1;margin-top:9px;" data-act="toast">换一版</div></div>
+      </div>
+
+      <div class="sec-t">线索列表 · 社交 CRM 自动归因</div>
+      <div class="lead hot" data-act="toast:已发送：AI 口语诊断链接（绑定推荐码 QD-SG-0186，全程可归因）">
+        <div class="av" style="background:var(--green)">陈</div>
+        <div>
+          <div class="nm">陈太 Grace Tan <span class="pill amber" style="margin-left:3px;">高意向</span></div>
+          <div class="mt">昨晚 21:14 通过你的 WhatsApp 海报留资 · 儿子 Kai 8 岁 · 想提升开口自信<br>AI 建议：2 小时内发送 AI 诊断链接，转化率最高</div>
+        </div>
+        <div class="sg"><div class="score">92</div><div style="font-size:9px;color:var(--sub);">意向分</div></div>
+      </div>
+      <div class="lead" data-act="toast:已记录跟进（演示）">
+        <div class="av" style="background:#3B7DDD">王</div>
+        <div>
+          <div class="nm">王太 Vivian Ong</div>
+          <div class="mt">小红书私信咨询 · 女儿 6 岁 · 问价格<br>AI 话术已备好：先发免费诊断，不谈价格</div>
+        </div>
+        <div class="sg"><div class="score" style="color:var(--green)">74</div><div style="font-size:9px;color:var(--sub);">意向分</div></div>
+      </div>
+      <div class="lead" data-act="toast:已记录跟进（演示）">
+        <div class="av" style="background:var(--amber)">A</div>
+        <div>
+          <div class="nm">Mr. Ahmad</div>
+          <div class="mt">Facebook 留资 · 双胞胎 9 岁 · 对比过线下中心</div>
+        </div>
+        <div class="sg"><div class="score" style="color:var(--sub)">58</div><div style="font-size:9px;color:var(--sub);">意向分</div></div>
+      </div>
+
+      <div class="sec-t">我的经营</div>
+      <div class="card">
+        <div class="kv"><span class="k">本月有效线索</span><span class="v" style="font-weight:600;">23 条（目标 25）</span></div>
+        <div class="kv"><span class="k">试听完成</span><span class="v" style="font-weight:600;">7 人</span></div>
+        <div class="kv"><span class="k">首单成交</span><span class="v" style="font-weight:600;color:var(--dgreen);">2 人 · 服务奖励 S$46.08（18% · 单层）</span></div>
+        <div class="kv"><span class="k">服务评分 / 违规</span><span class="v" style="font-weight:600;">4.9 分 ｜ <span style="color:var(--dgreen)">0 次</span></span></div>
+      </div>
+      <div class="chk">🛡️ 合规提示：你的奖励只与真实成交和服务挂钩——平台没有、也不能有"拉人头"收益。本周你的内容 100% 通过广告法与收益承诺双审。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 屏2 家长落地页 ============ -->
+<div class="screen" data-screen="1">
+  <div class="phone">
+    <div class="pnav">说客英语 · 新加坡<span class="who">C端 · 家长</span></div>
+    <div class="pbody">
+      <div style="background:linear-gradient(150deg,#0E6B48,#1F9D6C 60%,#7FC8A9);border-radius:16px;color:#fff;padding:18px 16px;margin-bottom:10px;">
+        <div style="font-size:10px;opacity:.85;">Jason（认证学习合伙人）推荐 · 推荐码 QD-SG-0186</div>
+        <div style="font-size:19px;font-weight:800;line-height:1.4;margin-top:6px;">让孩子敢开口说英语<br>免费 AI 口语诊断 + 真人外教试听</div>
+        <div style="font-size:11px;opacity:.92;margin-top:8px;line-height:1.6;">真人高互动 1v1 ｜ AI 每日陪练 ｜ 每月可见成长报告<br>已有 200 万+ 家庭体验过说客英语的真人课堂</div>
+      </div>
+
+      <div class="sec-t">第一步 · 免费 AI 口语诊断（3 分钟）</div>
+      <div class="card">
+        <div class="kv"><span class="k">孩子年龄</span><span class="v" style="font-weight:600;">8 岁（Kai）</span></div>
+        <div class="kv"><span class="k">当前水平自评</span><span class="v" style="font-weight:600;">听得懂，不太敢说</span></div>
+        <div class="kv"><span class="k">学习目标</span><span class="v" style="font-weight:600;">日常交流 + 表达自信</span></div>
+        <div class="btn" data-act="diag">开始 AI 口语诊断（跟读 2 句话）</div>
+      </div>
+      <div class="card" id="diagResult" style="display:none;border:1.5px solid var(--green);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--green) 0 72%,#EEF1EF 72% 100%);display:flex;align-items:center;justify-content:center;"><div style="width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--dgreen);">Pre-A1</div></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--dgreen);">诊断完成：预估 CEFR Pre-A1</div>
+            <div style="font-size:10.5px;color:var(--sub);margin-top:4px;line-height:1.55;">发音基础好，句子输出偏少。建议：真人 1v1 建立开口自信 + AI 每日 10 分钟高频练习。</div>
+          </div>
+        </div>
+        <div class="btn" data-act="book">预约免费真人试听（已匹配 3 位老师）</div>
+      </div>
+
+      <div class="card" id="bookResult" style="display:none;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">为你推荐 · 按孩子年龄/水平/时区匹配</div>
+        <div style="display:flex;gap:10px;align-items:center;background:#F7FAF8;border-radius:10px;padding:10px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F2A93B,#c77d0a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;">S</div>
+          <div style="flex:1;"><div style="font-size:12px;font-weight:700;">Teacher Sarah 🇬🇧 <span class="pill" style="margin-left:2px;">匹配 96%</span></div><div style="font-size:10px;color:var(--sub);margin-top:2px;">8 年少儿教学 · 4.9 分 · 善长害羞型孩子</div></div>
+        </div>
+        <div class="chk" style="margin-top:8px;">✅ 已预约：本周六 10:00（新加坡时间）· 试听免费 · 老师会用到 Kai 的 AI 诊断结果</div>
+      </div>
+
+      <div class="sec-t">月度成长计划（试听后再决定，无强制）</div>
+      <div class="card">
+        <div style="display:flex;align-items:baseline;gap:6px;"><span class="num">S$128</span><span class="lab">/ 月 · 情景定价（与报告表 6-2 口径一致）</span></div>
+        <div class="kv" style="margin-top:6px;"><span class="k">真人外教 1v1</span><span class="v" style="font-weight:600;">8 次/月</span></div>
+        <div class="kv"><span class="k">AI 口语陪练</span><span class="v" style="font-weight:600;">每日 10-15 分钟</span></div>
+        <div class="kv"><span class="k">月度成长卡</span><span class="v" style="font-weight:600;">口语曲线 + 作品 + 教师点评</span></div>
+        <div class="kv"><span class="k">随时退订</span><span class="v" style="font-weight:600;color:var(--dgreen);">按未上课时比例退款</span></div>
+      </div>
+      <div style="font-size:10px;color:var(--sub);text-align:center;line-height:1.6;">🔒 PDPA 保护：未成年人数据需家长授权 · 诊断录音仅用于学习评估</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 屏3 学生AI练习 ============ -->
+<div class="screen" data-screen="2">
+  <div class="phone">
+    <div class="pnav">AI 口语练习 · Kai<span class="who">C端 · 学生</span></div>
+    <div class="pbody">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+        <div><div style="font-size:12px;font-weight:800;color:var(--dgreen);">🔥 连续练习 5 天</div><div class="lab" style="margin-top:3px;">本周目标 6 天 · 再练 1 天解锁新情景</div></div>
+        <div style="text-align:right;"><div class="num" style="font-size:19px;">320</div><div class="lab">成长值</div></div>
+      </div>
+
+      <div class="sec-t">今日情景任务：At the Hawker Centre 🍜</div>
+      <div class="chat"><div class="cav" style="background:var(--green)">AI</div><div class="msg">Hi Kai! Welcome to the hawker centre. What food would you like to order today? 😊</div></div>
+      <div class="chat mine"><div class="cav" style="background:#3B7DDD">K</div><div class="msg"><div class="voice"><span style="font-size:15px;">▶</span><span class="bars"><i style="height:6px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:14px"></i><i style="height:7px"></i></span><span style="font-size:10px;color:var(--sub)">0:04</span></div><div style="margin-top:4px;">"I want chicken rice, please."</div></div></div>
+      <div class="chat"><div class="cav" style="background:var(--green)">AI</div><div class="msg">Great job! 🌟 发音 86 分。<br>小提示：「chicken」的 /tʃ/ 再清楚一点，跟我读 —— <b>chicken rice</b>。再来一次？</div></div>
+      <div class="chat mine"><div class="cav" style="background:#3B7DDD">K</div><div class="msg"><div class="voice"><span style="font-size:15px;">▶</span><span class="bars"><i style="height:8px"></i><i style="height:14px"></i><i style="height:11px"></i><i style="height:13px"></i><i style="height:9px"></i></span><span style="font-size:10px;color:var(--sub)">0:03</span></div><div style="margin-top:4px;">"Chicken rice, please!"</div></div></div>
+      <div class="chat"><div class="cav" style="background:var(--green)">AI</div><div class="msg">Perfect! 94 分 ✅ 任务完成 +20 成长值<br>悄悄告诉你：周六试听课上，Sarah 老师也想听你介绍 hawker food 哦！</div></div>
+
+      <div class="sec-t">本周进步（AI 练习 · 每日可见）</div>
+      <div class="card">
+        <div class="kv"><span class="k">发音准确度</span><span class="v" style="font-weight:600;color:var(--dgreen);">78 → 86 分 ↑</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;"><span style="font-size:10px;color:var(--sub);width:64px;">流利度</span><div class="bar"><i style="width:72%"></i></div><span style="font-size:10px;color:var(--dgreen);font-weight:700;">+15%</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;"><span style="font-size:10px;color:var(--sub);width:64px;">完整句子输出</span><div class="bar"><i style="width:58%"></i></div><span style="font-size:10px;color:var(--dgreen);font-weight:700;">+22%</span></div>
+        <div class="chk" style="margin-top:8px;">📮 以上数据将汇总进 Kai 的《9 月成长卡》，试听课后由 Sarah 老师签名点评，妈妈可一键分享给家人。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 屏4 S端驾驶舱 ============ -->
+<div class="screen" data-screen="3">
+  <div class="dash">
+    <div class="dash-top">
+      <b>S 端经营驾驶舱</b><span style="font-size:11px;color:#8FA3B8;">青豆教育 · 新加坡样板市场 · 2026 年 9 月</span>
+      <div class="seg"><span>本周</span><span class="on">本月</span><span>试点累计</span></div>
+    </div>
+    <div class="dash-body">
+      <div class="kpis">
+        <div class="kpi"><div class="v">1,284</div><div class="d">有效线索（留资）</div><div class="tr up">↑ 18% vs 上月</div></div>
+        <div class="kpi"><div class="v">31%</div><div class="d">线索 → 试听完成率</div><div class="tr up">↑ 4pct</div></div>
+        <div class="kpi"><div class="v">27%</div><div class="d">试听 → 首单付费率</div><div class="tr up">↑ 3pct</div></div>
+        <div class="kpi"><div class="v">52</div><div class="d">NPS（家长净推荐值）</div><div class="tr up">↑ 6</div></div>
+        <div class="kpi"><div class="v">1.8%</div><div class="d">退款率（红线 &lt;5%）</div><div class="tr up">达标</div></div>
+      </div>
+      <div class="dash-grid">
+        <div>
+          <div class="panel">
+            <h4>增长漏斗：内容触达 → 续费（本月 · 情景演示数据）</h4>
+            <div class="funnel">
+              <div class="fstep"><div class="fb" style="width:100%;">内容触达 48,600</div><div class="fv">B端 76 人发布 · 100% 合规过审</div></div>
+              <div class="fstep"><div class="fb" style="width:52%;">有效线索 1,284</div><div class="fv">线索有效率 2.6%</div></div>
+              <div class="fstep"><div class="fb" style="width:38%;">AI 诊断 892</div><div class="fv">诊断完成率 69%</div></div>
+              <div class="fstep"><div class="fb" style="width:26%;">真人试听 398</div><div class="fv">试听率 31%</div></div>
+              <div class="fstep"><div class="fb" style="width:15%;">首单付费 107</div><div class="fv">付费率 27%</div></div>
+              <div class="fstep"><div class="fb" style="width:9%;background:linear-gradient(90deg,#c77d0a,var(--amber));">试点内续费 34</div><div class="fv">续费率 32%</div></div>
+            </div>
+          </div>
+          <div class="trace" style="margin-top:14px;">
+            <div class="th"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;"></span>线索归因回放：陈太 Grace Tan（证明数据回流）</div>
+            <div class="tl">
+              <div class="tli"><span class="tm">09-18 21:14</span><span>通过 Jason 的 WhatsApp 海报触达（内容 ID C-3341 · 推荐码 QD-SG-0186）</span></div>
+              <div class="tli"><span class="tm">09-18 21:19</span><span>留资成功 → 线索自动分配 Jason · AI 意向评分 92</span></div>
+              <div class="tli"><span class="tm">09-19 09:02</span><span>Jason 一键发送 AI 诊断链接（合规话术模板 #T-07）</span></div>
+              <div class="tli"><span class="tm">09-19 12:36</span><span>Kai 完成 AI 口语诊断：Pre-A1 · 发音 86 → 推荐成长计划</span></div>
+              <div class="tli"><span class="tm">09-19 12:41</span><span>预约真人试听：Teacher Sarah · 周六 10:00 · 诊断结果已同步老师</span></div>
+              <div class="tli pending"><span class="tm">预测</span><span>试听 → 首单概率 高（同类画像历史转化 34%）→ 成交后 Jason 获服务奖励，全程可审计</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h4>B 端学习合伙人活跃榜（本月）</h4>
+            <div class="brank"><div class="rk" style="background:var(--amber);color:#fff;">1</div><div><b>Jason Lim</b> · 新加坡留学生</div><div class="bv">线索 23 · 成交 2<br>评分 <b>4.9</b> · 违规 0</div></div>
+            <div class="brank"><div class="rk">2</div><div><b>Chloe Ng</b> · 双语宝妈 KOC</div><div class="bv">线索 19 · 成交 2<br>评分 <b>4.8</b> · 违规 0</div></div>
+            <div class="brank"><div class="rk">3</div><div><b>Mr. Devan</b> · 补习老师</div><div class="bv">线索 17 · 成交 1<br>评分 <b>4.9</b> · 违规 0</div></div>
+            <div class="brank"><div class="rk">4</div><div><b>Esther Sim</b> · 教育工作室</div><div class="bv">线索 14 · 成交 1<br>评分 <b>4.7</b> · 违规 0</div></div>
+            <div class="brank"><div class="rk">5</div><div><b>Alicia Foo</b> · 在读大学生</div><div class="bv">线索 11 · 成交 1<br>评分 <b>4.8</b> · 违规 0</div></div>
+          </div>
+          <div class="panel" style="margin-top:14px;">
+            <h4>AI 经营 Copilot · 预警与建议</h4>
+            <div class="alert">⚠️ <b>合规拦截</b>：B端「Kelvin」昨晚生成的内容含 "guaranteed improvement"，已被拦截并退回修改。本周拦截 3 条，误拦 0。</div>
+            <div class="chk" style="margin-top:10px;">💡 <b>续费预警</b>：12 名学员课时余额 &lt;20%，其中 8 人 NPS ≥ 9，已推送续费服务任务给对应合伙人。</div>
+            <div class="chk">💡 <b>选品建议</b>：K2-P3 启蒙计划占首单 61%，建议下月在新加坡增加该层级真人师资排班。</div>
+          </div>
+          <div class="panel" style="margin-top:14px;">
+            <h4>单位经济（情景值 · 与报告表 6-2 / 6-3 口径一致）</h4>
+            <div class="kv"><span class="k">C 端月费实收</span><span class="v" style="font-weight:600;">S$128</span></div>
+            <div class="kv"><span class="k">B 端服务佣金（18% · 仅一层）</span><span class="v" style="font-weight:600;">−S$23.04</span></div>
+            <div class="kv"><span class="k">单用户月贡献</span><span class="v" style="font-weight:800;color:var(--dgreen);font-size:15px;">S$54.96 · 42.9%</span></div>
+            <div class="kv"><span class="k">增量 CAC（情景）</span><span class="v" style="font-weight:600;">S$90 / 120 / 150</span></div>
+            <div class="kv"><span class="k">贡献回收期</span><span class="v" style="font-weight:600;color:var(--dgreen);">约 1.6 / 2.2 / 2.7 个月</span></div>
+            <div class="kv"><span class="k">规模化门槛</span><span class="v" style="font-weight:600;">回收期 ≤3 个月 且 LTV/CAC ≥3</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--sub);margin-top:14px;text-align:center;">情景演示数据，用于展示数据链路与看板形态；正式试点以真实经营数据回填 · 所有 AI 生成内容留痕可审计</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="demo-tag">青豆共生云 Demo · 四屏一闭环 · 情景演示数据</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const chips = [
+  "演示线索：陈太（Grace Tan）· 线索已留资",
+  "演示线索：陈太 · 已完成 AI 诊断 · 已预约周六试听",
+  "演示线索：陈太之子 Kai · 完成今日练习 · 数据写入成长卡",
+  "演示线索：陈太 · 全链路归因已回流至 S 端看板"
+];
+const tabs = document.querySelectorAll(".stage-tab");
+const screens = document.querySelectorAll(".screen");
+function go(i){
+  tabs.forEach((t,k)=>t.classList.toggle("on",k===i));
+  screens.forEach((s,k)=>s.classList.toggle("on",k===i));
+  document.getElementById("leadChip").textContent = chips[i];
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+tabs.forEach(t=>t.addEventListener("click",()=>go(+t.dataset.stage)));
+
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.add("on");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("on"),1800);
+}
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]");
+  if(!el) return;
+  const a=el.dataset.act;
+  if(a==="diag"){ document.getElementById("diagResult").style.display="block"; toast("AI 诊断完成：结果已同步至成长档案"); return; }
+  if(a==="book"){ document.getElementById("bookResult").style.display="block"; toast("试听已预约 · 线索状态回传 Jason 的工作台"); return; }
+  if(a.startsWith("toast:")){ toast(a.slice(6)); return; }
+  if(a==="toast"){ toast("演示环境 · 正式版接入真实服务"); return; }
+});
+</script>
+</body>
+</html>
