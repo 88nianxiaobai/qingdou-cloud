@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>青豆共生云 · 现场演示（四屏一闭环）</title>
+<script>/* 判定「手机 / 小程序式打开」：不依赖视口宽度（微信/小程序布局视口常 >520px 会漏判），UA + 触摸指针 + 窄宽度 三条件任一命中即启用全屏紧凑模式 */
+(function(){function m(){var ua=navigator.userAgent||'';return /Android|iPhone|iPod|iPad|Mobile|MicroMessenger|miniProgram|Windows Phone/i.test(ua)||(window.matchMedia&&matchMedia('(pointer:coarse)').matches)||window.innerWidth<=560;}function s(){document.documentElement.classList.toggle('is-mobile',m());}s();window.addEventListener('resize',s);window.addEventListener('orientationchange',s);})();</script>
 <style>
 :root{
   --green:#1F9D6C; --dgreen:#0E6B48; --lgreen:#E3F1EA; --amber:#F2A93B;
@@ -121,6 +123,34 @@ body{background:#E4EAE7;min-height:100vh;}
 .toast{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:99;background:rgba(20,40,30,.9);color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;max-width:82%;text-align:center;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .2s;}
 .toast.on{opacity:1;}
 @media(max-width:640px){ .dash-grid{grid-template-columns:1fr;} .kpis{grid-template-columns:repeat(2,1fr);} }
+
+/* ---------- 手机端 / 小程序式打开：全屏紧凑（内容首屏即见，顶部切换条极简） ---------- */
+html.is-mobile,html.is-mobile body{height:100%;}
+html.is-mobile body{background:#fff;display:flex;flex-direction:column;overflow:hidden;}
+html.is-mobile .ctl{flex:0 0 auto;position:static;padding:9px 12px 8px;box-shadow:0 1px 8px rgba(0,0,0,.14);}
+html.is-mobile .ctl .brand{gap:8px;flex-wrap:nowrap;}
+html.is-mobile .ctl .brand b{font-size:15px;white-space:nowrap;}
+html.is-mobile .ctl .brand .en{display:none;}
+html.is-mobile .ctl .lead-chip{margin-left:auto;min-width:0;font-size:10px;padding:3px 9px;gap:6px;}
+html.is-mobile .ctl .lead-chip .dot{width:6px;height:6px;}
+html.is-mobile #leadChip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+html.is-mobile .stages{flex-wrap:nowrap;gap:3px;margin-top:8px;}
+html.is-mobile .stage-arrow{font-size:10px;flex:0 0 auto;}
+html.is-mobile .stage-tab{min-width:0;flex:1 1 0;padding:6px 4px;border-radius:8px;text-align:center;}
+html.is-mobile .stage-tab .no{font-size:9px;}
+html.is-mobile .stage-tab .nm{font-size:10.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+html.is-mobile .stage-tab .ds{display:none;}          /* 去掉每格的说明行，避免占屏 */
+html.is-mobile .wrap{flex:1;min-height:0;max-width:none;padding:0;display:flex;flex-direction:column;overflow:hidden;}
+html.is-mobile .screen.on{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+html.is-mobile .phone{flex:1;min-height:0;width:100%;height:auto;margin:0;border:0;border-radius:0;box-shadow:none;}
+html.is-mobile .pnav{height:44px;border-radius:0;}
+html.is-mobile .pbody{padding:10px 10px 18px;}
+html.is-mobile .dash{flex:1;min-height:0;border-radius:0;box-shadow:none;overflow-y:auto;}
+html.is-mobile .dash-top{padding:12px 14px;}
+html.is-mobile .dash-body{padding:12px 12px 20px;}
+html.is-mobile .kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
+html.is-mobile .dash-grid{grid-template-columns:1fr;}
+html.is-mobile .demo-tag{display:none;}
 </style>
 </head>
 <body>
