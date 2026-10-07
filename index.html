@@ -11,6 +11,7 @@
   --green:#1F9D6C; --dgreen:#0E6B48; --lgreen:#E3F1EA; --amber:#F2A93B;
   --ink:#16283C; --body:#33404E; --sub:#6B7683; --line:#E3E9E6; --bg:#EEF2F0; --card:#FFFFFF;
 }
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 *{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;}
 body{background:#E4EAE7;min-height:100vh;}
 
@@ -54,7 +55,8 @@ body{background:#E4EAE7;min-height:100vh;}
 .pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;background:var(--lgreen);color:var(--dgreen);font-weight:600;}
 .pill.amber{background:#FDF1DC;color:#A86B06;}
 .pill.red{background:#FDEAEA;color:#B33A3A;}
-.kv{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.kv{display:flex;justify-content:space-between;flex-wrap:wrap;gap:0 10px;font-size:11.5px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.kv .v{margin-left:auto;text-align:right;flex:0 0 auto;}
 .kv:last-child{border-bottom:none;}
 .kv .k{color:var(--sub);}
 .num{font-size:24px;font-weight:800;color:var(--dgreen);}
@@ -80,11 +82,13 @@ body{background:#E4EAE7;min-height:100vh;}
 
 /* ---------- S端驾驶舱（桌面） ---------- */
 .dash{background:#fff;border-radius:18px;box-shadow:0 12px 40px rgba(14,60,40,.12);overflow:hidden;}
-.dash-top{background:var(--ink);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-.dash-top b{font-size:16px;}
-.dash-top .seg{margin-left:auto;display:flex;gap:6px;}
-.dash-top .seg span{font-size:11px;background:rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;cursor:pointer;}
-.dash-top .seg span.on{background:var(--green);}
+/* 与屏1-3 的 .pnav 同一套样式：白底、居中标题、右侧小标签 */
+.dash-top{flex:0 0 auto;height:46px;display:flex;align-items:center;justify-content:center;position:relative;background:#fff;border-bottom:1px solid var(--line);font-size:14.5px;font-weight:700;color:var(--ink);}
+.dash-top .who{position:absolute;right:12px;font-size:10px;color:var(--sub);font-weight:400;border:1px solid var(--line);border-radius:99px;padding:2px 9px;}
+/* 指令2：本周 / 本月 / 试点累计 —— 单独一条横条，用于模拟切换 */
+.dash-seg{flex:0 0 auto;display:flex;gap:8px;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);}
+.dash-seg span{font-size:11.5px;background:#F1F5F3;color:var(--sub);border-radius:8px;padding:5px 14px;cursor:pointer;}
+.dash-seg span.on{background:var(--green);color:#fff;font-weight:700;}
 .dash-body{padding:18px 22px;}
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;}
 .kpi{background:#F7FAF8;border-radius:12px;padding:13px 14px;}
@@ -97,7 +101,7 @@ body{background:#E4EAE7;min-height:100vh;}
 .panel h4{font-size:13px;color:var(--ink);margin-bottom:10px;}
 .funnel{display:flex;flex-direction:column;gap:5px;}
 .fstep{display:flex;align-items:center;gap:10px;font-size:11px;}
-.fstep .fb{height:24px;border-radius:6px;background:linear-gradient(90deg,var(--dgreen),var(--green));color:#fff;display:flex;align-items:center;padding:0 10px;font-weight:700;font-size:10.5px;white-space:nowrap;}
+.fstep .fb{height:24px;border-radius:6px;background:linear-gradient(90deg,var(--dgreen),var(--green));color:#fff;display:flex;align-items:center;padding:0 10px;font-weight:700;font-size:10.5px;white-space:nowrap;box-sizing:content-box;min-width:max-content;}   /* content-box 让 min-width 只约束文字区（含内边距的框会差 20px）；条不得窄于条内文字，否则白字露在浅底上=看不见 */
 .fstep .fv{color:var(--sub);white-space:nowrap;}
 .trace{background:#fff;border:1.5px solid var(--green);border-radius:12px;padding:12px 14px;}
 .trace .th{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:var(--dgreen);margin-bottom:8px;}
@@ -112,7 +116,8 @@ body{background:#E4EAE7;min-height:100vh;}
 .brank{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:11px;}
 .brank:last-child{border:none;}
 .brank .rk{width:20px;height:20px;border-radius:6px;background:var(--lgreen);color:var(--dgreen);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:10px;}
-.brank .bv{margin-left:auto;text-align:right;color:var(--sub);font-size:10px;}
+.brank>div:nth-child(2){min-width:0;}
+.brank .bv{margin-left:auto;text-align:right;color:#4C5A68;font-size:10.5px;flex:0 0 auto;white-space:nowrap;padding-left:8px;}
 .brank .bv b{color:var(--dgreen);font-size:12px;}
 .alert{display:flex;gap:8px;background:#FDF1DC;border-radius:10px;padding:9px 11px;font-size:10.5px;color:#A86B06;line-height:1.5;margin-top:10px;}
 .alert b,.chk b{white-space:nowrap;}               /* 防止 flex 把标签挤成竖排单字 */
@@ -135,7 +140,11 @@ html.is-mobile .pnav{height:44px;border-radius:0;}
 html.is-mobile .pbody{padding:10px 10px 18px;}
 /* 屏4 与屏1-3 同一套骨架：顶部两条不参与滚动，只有 .dash-body 自己上下滚（不依赖 sticky/CSS变量） */
 html.is-mobile .dash{flex:1;min-height:0;border-radius:0;box-shadow:none;display:flex;flex-direction:column;overflow:hidden;}
-html.is-mobile .dash-top{flex:0 0 auto;padding:12px 14px;position:static;}
+html.is-mobile .dash-top{height:44px;}
+html.is-mobile .dash-seg{padding:8px 12px;gap:6px;}
+html.is-mobile .fstep{flex-wrap:wrap;}
+html.is-mobile .fstep .fv{font-size:10px;}
+html.is-mobile .kv{font-size:11px;}
 html.is-mobile .dash-body{flex:1;min-height:0;padding:12px 12px 20px;overflow-y:auto;overflow-x:hidden;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;}
 html.is-mobile .kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
 html.is-mobile .dash-grid{grid-template-columns:1fr;}
@@ -294,10 +303,8 @@ html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash,ht
 <!-- ============ 屏4 S端驾驶舱 ============ -->
 <div class="screen" data-screen="3">
   <div class="dash">
-    <div class="dash-top">
-      <b>S 端经营驾驶舱</b><span style="font-size:11px;color:#8FA3B8;">青豆教育 · 新加坡样板市场 · 2026 年 9 月</span>
-      <div class="seg"><span>本周</span><span class="on">本月</span><span>试点累计</span></div>
-    </div>
+    <div class="dash-top">S 端经营驾驶舱<span class="who">S端 · 新加坡</span></div>
+    <div class="dash-seg"><span>本周</span><span class="on">本月</span><span>试点累计</span></div>
     <div class="dash-body">
       <div class="kpis">
         <div class="kpi"><div class="v">1,284</div><div class="d">有效线索（留资）</div><div class="tr up">↑ 18% vs 上月</div></div>
@@ -309,7 +316,7 @@ html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash,ht
       <div class="dash-grid">
         <div>
           <div class="panel">
-            <h4>增长漏斗：内容触达 → 续费（本月 · 情景演示数据）</h4>
+            <h4>增长漏斗：内容触达 → 续费</h4>
             <div class="funnel">
               <div class="fstep"><div class="fb" style="width:100%;">内容触达 48,600</div><div class="fv">B端 76 人发布 · 100% 合规过审</div></div>
               <div class="fstep"><div class="fb" style="width:52%;">有效线索 1,284</div><div class="fv">线索有效率 2.6%</div></div>
@@ -320,7 +327,7 @@ html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash,ht
             </div>
           </div>
           <div class="trace" style="margin-top:14px;">
-            <div class="th"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;"></span>线索归因回放：陈太 Grace Tan（证明数据回流）</div>
+            <div class="th"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;"></span>线索归因回放：陈太 Grace Tan</div>
             <div class="tl">
               <div class="tli"><span class="tm">09-18 21:14</span><span>通过 Jason 的 WhatsApp 海报触达（内容 ID C-3341 · 推荐码 QD-SG-0186）</span></div>
               <div class="tli"><span class="tm">09-18 21:19</span><span>留资成功 → 线索自动分配 Jason · AI 意向评分 92</span></div>
@@ -347,17 +354,17 @@ html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash,ht
             <div class="chk">💡 <b>选品建议</b>：K2-P3 启蒙计划占首单 61%，建议下月在新加坡增加该层级真人师资排班。</div>
           </div>
           <div class="panel" style="margin-top:14px;">
-            <h4>单位经济（情景值 · 与报告表 6-2 / 6-3 口径一致）</h4>
+            <h4>单位经济</h4>
             <div class="kv"><span class="k">C 端月费实收</span><span class="v" style="font-weight:600;">S$128</span></div>
             <div class="kv"><span class="k">B 端服务佣金（18% · 仅一层）</span><span class="v" style="font-weight:600;">−S$23.04</span></div>
-            <div class="kv"><span class="k">单用户月贡献</span><span class="v" style="font-weight:800;color:var(--dgreen);font-size:15px;">S$54.96 · 42.9%</span></div>
-            <div class="kv"><span class="k">增量 CAC（情景）</span><span class="v" style="font-weight:600;">S$90 / 120 / 150</span></div>
+            <div class="kv"><span class="k">单用户月贡献</span><span class="v" style="font-weight:800;color:var(--dgreen);font-size:13.5px;">S$54.96 · 42.9%</span></div>
+            <div class="kv"><span class="k">增量 CAC</span><span class="v" style="font-weight:600;">S$90 / 120 / 150</span></div>
             <div class="kv"><span class="k">贡献回收期</span><span class="v" style="font-weight:600;color:var(--dgreen);">约 1.6 / 2.2 / 2.7 个月</span></div>
             <div class="kv"><span class="k">规模化门槛</span><span class="v" style="font-weight:600;">回收期 ≤3 个月 且 LTV/CAC ≥3</span></div>
           </div>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--sub);margin-top:14px;text-align:center;">情景演示数据，用于展示数据链路与看板形态；正式试点以真实经营数据回填 · 所有 AI 生成内容留痕可审计</div>
+      <div style="font-size:10px;color:var(--sub);margin-top:14px;text-align:center;">正式试点以真实经营数据回填 · 所有 AI 生成内容留痕可审计</div>
     </div>
   </div>
 </div>
@@ -383,6 +390,11 @@ function go(i){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 tabs.forEach(t=>t.addEventListener("click",()=>go(+t.dataset.stage)));
+
+// 指令2：「本周 / 本月 / 试点累计」横条，点击模拟切换
+document.querySelectorAll(".dash-seg span").forEach(s=>s.addEventListener("click",()=>{
+  document.querySelectorAll(".dash-seg span").forEach(x=>x.classList.toggle("on",x===s));
+}));
 
 let toastTimer;
 function toast(msg){
