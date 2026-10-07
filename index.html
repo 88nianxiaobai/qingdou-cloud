@@ -16,19 +16,13 @@ body{background:#E4EAE7;min-height:100vh;}
 
 /* ---------- 顶部演示控制台 ---------- */
 .ctl{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;padding:12px 4%;box-shadow:0 2px 12px rgba(0,0,0,.18);}
-.ctl .brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ctl .brand{display:flex;align-items:center;gap:10px;}
 .ctl .brand b{font-size:16px;letter-spacing:.02em;}
-.ctl .brand .en{font-size:11px;color:#8FA3B8;}
-.ctl .lead-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 14px;font-size:12px;margin-left:auto;}
-.ctl .lead-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:blink 1.6s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 /* ---------- 底部切换条（小程序式 Tab · 顶部不再放模块） ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:6px;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:rgba(22,40,60,.97);box-shadow:0 -2px 16px rgba(0,0,0,.20);}
 .tabbar .stage-tab{flex:1;min-width:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .18s;}
-.tabbar .stage-tab .no{font-size:9.5px;color:#7FC8A9;font-weight:700;}
-.tabbar .stage-tab .nm{font-size:11.5px;font-weight:700;color:#fff;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tabbar .stage-tab .nm{font-size:11.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tabbar .stage-tab.on{background:var(--green);border-color:var(--green);}
-.tabbar .stage-tab.on .no{color:#DFF3EA;}
 @media(min-width:900px){                              /* 宽屏：居中胶囊，像演示遥控 */
   .tabbar{left:50%;right:auto;transform:translateX(-50%);bottom:16px;border-radius:14px;padding:7px 8px;box-shadow:0 8px 26px rgba(0,0,0,.28);}
   .tabbar .stage-tab{flex:0 0 auto;width:138px;}
@@ -98,7 +92,7 @@ body{background:#E4EAE7;min-height:100vh;}
 .kpi .d{font-size:10.5px;color:var(--sub);margin-top:4px;}
 .kpi .tr{font-size:10px;margin-top:3px;font-weight:700;}
 .tr.up{color:var(--green);} .tr.down{color:#B33A3A;}
-.dash-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;}
+.dash-grid{display:grid;grid-template-columns:1fr;gap:14px;}
 .panel{background:#F7FAF8;border-radius:12px;padding:14px 16px;}
 .panel h4{font-size:13px;color:var(--ink);margin-bottom:10px;}
 .funnel{display:flex;flex-direction:column;gap:5px;}
@@ -121,6 +115,7 @@ body{background:#E4EAE7;min-height:100vh;}
 .brank .bv{margin-left:auto;text-align:right;color:var(--sub);font-size:10px;}
 .brank .bv b{color:var(--dgreen);font-size:12px;}
 .alert{display:flex;gap:8px;background:#FDF1DC;border-radius:10px;padding:9px 11px;font-size:10.5px;color:#A86B06;line-height:1.5;margin-top:10px;}
+.alert b,.chk b{white-space:nowrap;}               /* 防止 flex 把标签挤成竖排单字 */
 .demo-tag{position:fixed;bottom:14px;right:16px;font-size:10px;color:#9AA6A0;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:99px;padding:4px 12px;}
 .toast{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:99;background:rgba(20,40,30,.9);color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;max-width:82%;text-align:center;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .2s;}
 .toast.on{opacity:1;}
@@ -130,33 +125,33 @@ body{background:#E4EAE7;min-height:100vh;}
 html.is-mobile,html.is-mobile body{height:100%;}
 html.is-mobile body{background:#fff;display:flex;flex-direction:column;overflow:hidden;}
 html.is-mobile .ctl{flex:0 0 auto;position:static;padding:9px 12px 8px;box-shadow:0 1px 8px rgba(0,0,0,.14);}
-html.is-mobile .ctl .brand{gap:8px;flex-wrap:nowrap;}
+html.is-mobile .ctl .brand{gap:8px;}
 html.is-mobile .ctl .brand b{font-size:15px;white-space:nowrap;}
-html.is-mobile .ctl .brand .en{display:none;}
-html.is-mobile .ctl .lead-chip{margin-left:auto;min-width:0;font-size:10px;padding:3px 9px;gap:6px;}
-html.is-mobile .ctl .lead-chip .dot{width:6px;height:6px;}
-html.is-mobile #leadChip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-html.is-mobile .tabbar .stage-tab .no{font-size:9px;}
-html.is-mobile .tabbar .stage-tab .nm{font-size:10.5px;}
+html.is-mobile .tabbar .stage-tab .nm{font-size:10.5px;white-space:normal;line-height:1.25;}
 html.is-mobile .wrap{flex:1;min-height:0;max-width:none;padding:0 0 56px;display:flex;flex-direction:column;overflow:hidden;}
 html.is-mobile .screen.on{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
 html.is-mobile .phone{flex:1;min-height:0;width:100%;height:auto;margin:0;border:0;border-radius:0;box-shadow:none;}
 html.is-mobile .pnav{height:44px;border-radius:0;}
 html.is-mobile .pbody{padding:10px 10px 18px;}
 html.is-mobile .dash{flex:1;min-height:0;border-radius:0;box-shadow:none;overflow-y:auto;}
-html.is-mobile .dash-top{padding:12px 14px;}
+html.is-mobile .dash-top{padding:12px 14px;position:sticky;top:0;z-index:5;}
 html.is-mobile .dash-body{padding:12px 12px 20px;}
 html.is-mobile .kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
 html.is-mobile .dash-grid{grid-template-columns:1fr;}
 html.is-mobile .demo-tag{display:none;}
+/* 屏4（驾驶舱）：整页滚动而非内层滚动，保证内容都能看到、不被底栏压住 */
+html.is-mobile.s-dash,html.is-mobile.s-dash body{height:auto;overflow:visible;}
+html.is-mobile.s-dash .wrap{flex:0 0 auto;overflow:visible;}
+html.is-mobile.s-dash .screen.on{flex:0 0 auto;overflow:visible;}
+html.is-mobile.s-dash .dash{flex:0 0 auto;overflow:visible;}
+html.is-mobile.s-dash .dash-top{position:static;}
 </style>
 </head>
 <body>
 
 <div class="ctl">
   <div class="brand">
-    <b>青豆共生云</b><span class="en">Qingdou Co-Grow Cloud · 现场演示</span>
-    <div class="lead-chip"><span class="dot"></span><span id="leadChip">演示线索：陈太（Grace Tan）· 线索已留资</span></div>
+    <b>青豆共生云</b>
   </div>
 </div>
 
@@ -371,28 +366,22 @@ html.is-mobile .demo-tag{display:none;}
 </div>
 
 <div class="tabbar">
-  <div class="stage-tab on" data-stage="0"><div class="no">屏 1 · B端</div><div class="nm">学习合伙人工作台</div></div>
-  <div class="stage-tab" data-stage="1"><div class="no">屏 2 · C端</div><div class="nm">家长落地页</div></div>
-  <div class="stage-tab" data-stage="2"><div class="no">屏 3 · C端</div><div class="nm">学生 AI 口语练习</div></div>
-  <div class="stage-tab" data-stage="3"><div class="no">屏 4 · S端</div><div class="nm">经营驾驶舱</div></div>
+  <div class="stage-tab on" data-stage="0"><div class="nm">学习合伙人工作台</div></div>
+  <div class="stage-tab" data-stage="1"><div class="nm">家长落地页</div></div>
+  <div class="stage-tab" data-stage="2"><div class="nm">学生 AI 口语练习</div></div>
+  <div class="stage-tab" data-stage="3"><div class="nm">经营驾驶舱</div></div>
 </div>
 
 <div class="demo-tag">青豆共生云 Demo · 四屏一闭环 · 情景演示数据</div>
 <div class="toast" id="toast"></div>
 
 <script>
-const chips = [
-  "演示线索：陈太（Grace Tan）· 线索已留资",
-  "演示线索：陈太 · 已完成 AI 诊断 · 已预约周六试听",
-  "演示线索：陈太之子 Kai · 完成今日练习 · 数据写入成长卡",
-  "演示线索：陈太 · 全链路归因已回流至 S 端看板"
-];
 const tabs = document.querySelectorAll(".stage-tab");
 const screens = document.querySelectorAll(".screen");
 function go(i){
   tabs.forEach((t,k)=>t.classList.toggle("on",k===i));
   screens.forEach((s,k)=>s.classList.toggle("on",k===i));
-  document.getElementById("leadChip").textContent = chips[i];
+  document.documentElement.classList.toggle("s-dash",i===3);   // 屏4 改整页滚动
   window.scrollTo({top:0,behavior:"smooth"});
 }
 tabs.forEach(t=>t.addEventListener("click",()=>go(+t.dataset.stage)));
