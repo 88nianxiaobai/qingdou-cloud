@@ -133,20 +133,17 @@ html.is-mobile .screen.on{flex:1;min-height:0;display:flex;flex-direction:column
 html.is-mobile .phone{flex:1;min-height:0;width:100%;height:auto;margin:0;border:0;border-radius:0;box-shadow:none;}
 html.is-mobile .pnav{height:44px;border-radius:0;}
 html.is-mobile .pbody{padding:10px 10px 18px;}
-html.is-mobile .dash{flex:1;min-height:0;border-radius:0;box-shadow:none;overflow-y:auto;}
-html.is-mobile .dash-top{padding:12px 14px;position:sticky;top:0;z-index:5;}
-html.is-mobile .dash-body{padding:12px 12px 20px;}
+/* 屏4 与屏1-3 同一套骨架：顶部两条不参与滚动，只有 .dash-body 自己上下滚（不依赖 sticky/CSS变量） */
+html.is-mobile .dash{flex:1;min-height:0;border-radius:0;box-shadow:none;display:flex;flex-direction:column;overflow:hidden;}
+html.is-mobile .dash-top{flex:0 0 auto;padding:12px 14px;position:static;}
+html.is-mobile .dash-body{flex:1;min-height:0;padding:12px 12px 20px;overflow-y:auto;overflow-x:hidden;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;}
 html.is-mobile .kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
 html.is-mobile .dash-grid{grid-template-columns:1fr;}
 html.is-mobile .demo-tag{display:none;}
 /* 手机端统一锁定：只能上下滑，禁掉左右滑/横滑（仅 overflow-x:hidden 在真机仍会触发横向手势） */
-html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash{overscroll-behavior-x:contain;touch-action:pan-y;}
-/* 屏4（驾驶舱）：整页滚动（内容全看得见），但顶部两条固定不动、且只能上下滑 */
-html.is-mobile.s-dash{height:auto;overflow-x:hidden;overscroll-behavior-x:contain;touch-action:pan-y;}
-html.is-mobile.s-dash body{height:auto;overflow:visible;touch-action:pan-y;}
-html.is-mobile.s-dash .wrap,html.is-mobile.s-dash .screen.on,html.is-mobile.s-dash .dash{flex:0 0 auto;overflow:visible;}
-html.is-mobile.s-dash .ctl{position:sticky;top:0;}
-html.is-mobile.s-dash .dash-top{position:sticky;top:var(--ctlh,37px);z-index:8;}
+/* 只能上下滑：1指横滑一律不响应（保留双指缩放） */
+html,body{touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;}
+html.is-mobile,html.is-mobile body,html.is-mobile .pbody,html.is-mobile .dash,html.is-mobile .dash-body{overflow-x:hidden;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;}
 </style>
 </head>
 <body>
@@ -383,14 +380,9 @@ const screens = document.querySelectorAll(".screen");
 function go(i){
   tabs.forEach((t,k)=>t.classList.toggle("on",k===i));
   screens.forEach((s,k)=>s.classList.toggle("on",k===i));
-  document.documentElement.classList.toggle("s-dash",i===3);   // 屏4 改整页滚动
   window.scrollTo({top:0,behavior:"smooth"});
 }
 tabs.forEach(t=>t.addEventListener("click",()=>go(+t.dataset.stage)));
-
-// 把顶部条实测高度写进 --ctlh，供屏4 驾驶舱头吸顶对齐
-function syncCtlH(){document.documentElement.style.setProperty("--ctlh",document.querySelector(".ctl").offsetHeight+"px");}
-syncCtlH(); window.addEventListener("resize",syncCtlH);
 
 let toastTimer;
 function toast(msg){
